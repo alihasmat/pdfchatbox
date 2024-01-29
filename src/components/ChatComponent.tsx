@@ -32,6 +32,7 @@ export default function ChatComponent({ chatId }: Props) {
         },
         initialMessages: data || [],
     })
+
     useEffect(() => {
         const messageContainer = document.getElementById("message-container");
         if (messageContainer) {
@@ -40,7 +41,7 @@ export default function ChatComponent({ chatId }: Props) {
             behavior: "smooth",
           });
         }
-      }, []);
+      }, [messages]);
 
     return (
         <div className="relative max-h-screen overflow-scroll"

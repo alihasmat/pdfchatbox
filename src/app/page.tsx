@@ -1,13 +1,27 @@
 import { Button } from "@/components/ui/button"
 import { UserButton, auth, currentUser } from "@clerk/nextjs";
 import FileUpload from "@/components/FileUpload";
-import {LogIn} from "lucide-react"
+import {ArrowRight, LogIn} from "lucide-react"
 import Link from "next/link"
+import { checkSubscription } from "@/lib/subscription";
+import SubscriptionButton from "@/components/SubscriptionButton";
+import { db } from "@/lib/db";
+import { chats } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 
 export default async function Home() {
   const {userId} = await auth();
   const isAuth = !!userId;
   const user = await currentUser();
+  const isPro = await checkSubscription();
+
+  let firstChat;
+  if(userId) {
+    firstChat = await db.select().from(chats).where(eq(chats.userId, userId));
+    if(firstChat) {
+      firstChat = firstChat[0];
+    }
+  }
 
   return (
     <main className="min-h-screen flex flex-col items-center">
@@ -36,8 +50,9 @@ export default async function Home() {
           <p className="text-lg lg:text-lg !leading-tight mx-auto max-w-xl text-center">
           Unlock smarter PDF interactions with PDFChatBox - join millions of students, teachers and professionals.
           </p>
-          <div className="mt-2">
-            {isAuth && <Link href="chat"><Button>Go to chats</Button></Link>}
+          <div className="flex mt-2">
+            {isAuth &&  firstChat && <Link href={`chat/${firstChat?.id}`}><Button>Go to chats<ArrowRight className="w-6 h-6 ml-2" /></Button></Link>}
+            <div className="ml-2"><SubscriptionButton isPro={isPro} /></div>
           </div>
           <div className="w-full mt-2">
             {

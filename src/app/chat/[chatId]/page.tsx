@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { chats } from "@/lib/db/schema";
+import { checkSubscription } from "@/lib/subscription";
 
 
 type Props = {
@@ -31,12 +32,13 @@ const ChatPage = async ({params: {chatId}}: Props) => {
     }
 
     const currentChat = _chats.find((chat) => chat.id === parseInt(chatId));
+    const isPro = await checkSubscription();
 
     return (
         <div className="flex max-h-screen overflow-scroll">
             <div className="flex w-full max-h-screen overflow-scroll">
                 <div className="flex-[1] max-w-xs">
-                    <ChatSideBar chats={_chats} chatId={parseInt(chatId)} />
+                    <ChatSideBar chats={_chats} chatId={parseInt(chatId)} isPro={isPro} />
                 </div>
                 <div className="flex-[5] max-h-screen p-4 overflow-scroll">
                     <PdfViewer pdf_url={currentChat?.pdfUrl || ""} />
