@@ -8,6 +8,7 @@ import SubscriptionButton from "@/components/SubscriptionButton";
 import { db } from "@/lib/db";
 import { chats } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import Image from "next/image";
 
 export default async function Home() {
   const {userId} = await auth();
@@ -59,12 +60,15 @@ export default async function Home() {
               isAuth ? (
                 <FileUpload />
               ): (
-            
-                <Link href="sign-in" className="flex justify-center">
-                  <Button> Login to get started
-                    <LogIn className="w-4 h-4 ml-2" />
-                  </Button>
-                </Link>
+                <div className="flex flex-col items-center">
+                  <Link href="sign-in" className="flex justify-center">
+                    <Button> Login to get started
+                      <LogIn className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+  
+                  <Image className="mt-4 shadow-xl" src="/pdfchatbox-image.png" width={600} height={400} alt="pdfchatbox" />
+                </div>
               
                 
               )
