@@ -1,6 +1,6 @@
 "use client"
-import { useEffect } from "react"
-import { Send } from "lucide-react"
+import { useEffect, useState } from "react"
+import { Loader2, Send, Trash } from "lucide-react"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import {useChat} from "ai/react"
@@ -8,6 +8,8 @@ import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { Message } from "ai"
 import MessageList from "./MessageList"
+import {useRouter} from "next/navigation"
+
 
 
 type Props = {
@@ -15,6 +17,9 @@ type Props = {
 }
 
 export default function ChatComponent({ chatId }: Props) {
+    const router = useRouter();
+    const [isDeleting, setIsDeleting] = useState(false)
+
     const {data, isLoading} = useQuery({
         queryKey: ["chat", chatId],
         queryFn: async () => {
@@ -43,12 +48,45 @@ export default function ChatComponent({ chatId }: Props) {
         }
       }, [messages]);
 
+
+      async function handleDelete() {
+        try {
+
+            setIsDeleting(true)
+
+            await axios.delete('/api/delete-chat', { data: { chatId } });
+            
+            const nextChatId = chatId + 1;
+
+            if (nextChatExists(nextChatId)) {
+                router.push(`/chat/${nextChatId}`);
+            } else {
+                router.push('/');
+            }
+        } catch (error) {
+            console.error('Error deleting chat:', error);
+        } finally {
+            setIsDeleting(false);
+        }
+      }
+
+      function nextChatExists(nextChatId: number): boolean {
+        return true;
+      }
+
     return (
         <div className="relative max-h-screen overflow-scroll"
         id="message-container">
             {/* header */}
-            <div className="sticky top-0 inset-x-0 p-2 bg-white h-fit">
-                <h3 className="text-xl font-bold">Chat</h3>
+            <div className="flex sticky top-0 inset-x-0 p-2 bg-white h-fit">
+                <h3 className="text-xl font-bold flex-1">Chat</h3>
+                <button onClick={handleDelete}  disabled={isDeleting} type="button">
+                    {isDeleting ? (
+                        <Loader2 className="w-4 h-6 mr-4"/>
+                        ): (
+                        <Trash className="w-4 h-6 mr-4"/>
+                    )}
+                </button>
             </div>
 
             {/* message list */}

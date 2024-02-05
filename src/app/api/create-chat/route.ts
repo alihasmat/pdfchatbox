@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { chats } from "@/lib/db/schema";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import loadS3IntoPinecone from "@/lib/pinecone";
 import { getS3Url } from "@/lib/s3";
 import { auth } from "@clerk/nextjs";
@@ -45,3 +45,4 @@ export async function POST(req: Request, res: Response) {
         )
     }
 }
+
