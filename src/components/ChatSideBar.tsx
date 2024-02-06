@@ -4,8 +4,6 @@ import { Button } from "./ui/button";
 import { MessageCircle, PlusCircle } from "lucide-react";
 import { DrizzleChat } from "@/lib/db/schema";
 import { cn } from "@/lib/utils";
-// import { useState } from "react";
-// import axios from "axios";
 import SubscriptionButton from "./SubscriptionButton";
 
 type Props = {
@@ -15,18 +13,6 @@ type Props = {
 }
 
 export default function ChatSideBar({chats, chatId, isPro}: Props) {
-    // const [loading, setLoading] = useState(false)
-    // const handleSubscription = async () => {
-    //     try {
-    //         setLoading(true)
-    //         const response = await axios.get('/api/stripe')
-    //         window.location.href= response.data.url;
-    //     } catch (error) {
-    //         console.error(error)
-    //     } finally {
-    //         setLoading(false)
-    //     }
-    // }
 
 
     return (

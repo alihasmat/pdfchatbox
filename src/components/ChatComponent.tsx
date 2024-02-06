@@ -48,34 +48,37 @@ export default function ChatComponent({ chatId }: Props) {
         }
       }, [messages]);
 
-
+     
       async function handleDelete() {
         try {
             setIsDeleting(true)
     
             await axios.delete('/api/delete-chat', { data: { chatId } });
-    
+            
             const nextChatId = chatId - 1;
-    
-            if (nextChatExists(nextChatId)) {
-                // Trigger navigation after the component is updated
-                setTimeout(() => {
-                    router.push(`/chat/${nextChatId}`);
-                }, 0);
-            } else {
-                router.push('/');
-            }
+
+        if (nextChatExists(nextChatId)) {
+            router.push(`/chat/${nextChatId}`);
+            router.refresh(); // You might not need this line depending on your use case
+        } else {
+            router.push('/');
+        }
+            
         } catch (error) {
             console.error('Error deleting chat:', error);
         } finally {
             setIsDeleting(false);
         }
     }
-    
 
-      function nextChatExists(nextChatId: number): boolean {
-        return true;
-      }
+    // Function to check if the next chat exists
+  function nextChatExists(nextChatId: number): boolean {
+    // Replace this with your specific logic to check if the next chat ID exists
+    // For example, check if the nextChatId is within a valid range or exists in your database
+    // Return true if the next chat exists, otherwise return false
+    return true;
+  }
+
 
     return (
         <div className="relative max-h-screen overflow-scroll"

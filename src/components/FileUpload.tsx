@@ -1,5 +1,5 @@
 "use client"
-import {useState} from "react";
+import { useState, useEffect } from 'react';
 import { Loader2, Inbox } from "lucide-react";
 import {useDropzone} from 'react-dropzone'
 import uploadToS3 from "@/lib/s3";
@@ -19,15 +19,7 @@ export default function FileUpload() {
         file_key,
       });
       return response.data;
-    },
-    onSettled: (data, error) => {
-      if (!error && data && data.chat_id) {
-            router.push(`/chat/${data.chat_id}`);
-          } else {
-            console.error(error);
-            // Handle error case if needed
-          }
-        },
+    }
     });
   
 
@@ -35,7 +27,7 @@ export default function FileUpload() {
         accept: {"application/pdf": [".pdf"]},
             maxFiles: 1,
             onDrop: async (acceptedFiles) => {
-              console.log(acceptedFiles)
+              // console.log(acceptedFiles)
               const file = acceptedFiles[0];
               if(file.size > 10 * 1024 *1024) {
                 toast.error("File too large");
@@ -53,6 +45,7 @@ export default function FileUpload() {
                   onSuccess: ({chat_id}) => {
                     toast.success("chat created")
                     router.push(`/chat/${chat_id}`)
+                    router.refresh();
                   },
                   onError: (error) => {
                     console.error(error)
