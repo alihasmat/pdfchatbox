@@ -13,14 +13,23 @@ export default function FileUpload() {
 
   const [uploading, setUploading] = useState(false)
   const { mutate, isPending } = useMutation({
-    mutationFn: async ({file_key, file_name} : {file_key: string, file_name: string}) => {
+    mutationFn: async ({ file_key, file_name }: { file_key: string; file_name: string }) => {
       const response = await axios.post('/api/create-chat', {
         file_name,
         file_key,
       });
       return response.data;
-    }
-  })
+    },
+    onSettled: (data, error) => {
+      if (!error && data && data.chat_id) {
+            router.push(`/chat/${data.chat_id}`);
+          } else {
+            console.error(error);
+            // Handle error case if needed
+          }
+        },
+    });
+  
 
     const {getInputProps, getRootProps} = useDropzone({
         accept: {"application/pdf": [".pdf"]},

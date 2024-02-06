@@ -51,15 +51,17 @@ export default function ChatComponent({ chatId }: Props) {
 
       async function handleDelete() {
         try {
-
             setIsDeleting(true)
-
+    
             await axios.delete('/api/delete-chat', { data: { chatId } });
-            
-            const nextChatId = chatId + 1;
-
+    
+            const nextChatId = chatId - 1;
+    
             if (nextChatExists(nextChatId)) {
-                router.push(`/chat/${nextChatId}`);
+                // Trigger navigation after the component is updated
+                setTimeout(() => {
+                    router.push(`/chat/${nextChatId}`);
+                }, 0);
             } else {
                 router.push('/');
             }
@@ -68,7 +70,8 @@ export default function ChatComponent({ chatId }: Props) {
         } finally {
             setIsDeleting(false);
         }
-      }
+    }
+    
 
       function nextChatExists(nextChatId: number): boolean {
         return true;

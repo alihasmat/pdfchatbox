@@ -52,7 +52,7 @@ export default async function Home() {
           Unlock smarter PDF interactions with PDFChatBox - join millions of students, teachers and professionals.
           </p>
           <div className="flex mt-2">
-            {isAuth &&  firstChat && <Link href={`chat/${firstChat?.id}`}><Button>Go to chats<ArrowRight className="w-6 h-6 ml-2" /></Button></Link>}
+            {isAuth &&  firstChat && <a href={`/chat/${firstChat?.id}`}><Button>Go to chats<ArrowRight className="w-6 h-6 ml-2" /></Button></a>}
             <div className="ml-2"><SubscriptionButton isPro={isPro} /></div>
           </div>
           <div className="w-full mt-2">
